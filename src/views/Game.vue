@@ -1,21 +1,23 @@
 <template>
   <Header />
-  <Content/>
-  <Footer/>
+  <Game />
+  <Footer />
 </template>
 
 <script>
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import Content from '@/components/Content.vue'
+import Game from '@/components/Game.vue'
+
+
 
 export default {
   name: 'Home',
   components: {
     Header,
-    Footer, 
-    Content, 
+    Footer,
+    Game
   }
 }
 </script>

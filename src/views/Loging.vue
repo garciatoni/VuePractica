@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <Content/>
+  <Login />
   <Footer/>
 </template>
 
@@ -8,14 +8,15 @@
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import Content from '@/components/Content.vue'
+import Login from '@/components/Login.vue'
+
 
 export default {
   name: 'Home',
   components: {
     Header,
     Footer, 
-    Content, 
+    Login
   }
 }
 </script>
