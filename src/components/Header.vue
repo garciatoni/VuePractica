@@ -22,7 +22,8 @@
                 <div class="col-4">
                     <nav id="nav2" class="right">
                         <a id="install" href="#" class="button">📁 Install Stim</a>
-                        <router-link to="/loging">Loging</router-link>
+                        <router-link v-if="user == 'login'" to="/loging">{{user}}</router-link>
+                        <router-link v-else to="/">{{user}}</router-link>
                         <select id="language" v-model="idioma" name="idioma" @change="canvi">
                             <!-- V-MODEL= PARA SELECIONAR EL 'VALUE DEL IDIOMA' -->
                             <option selected disabled>Language</option>
@@ -39,7 +40,8 @@
 
 <script> 
 //IMPORTAR SIEMPRE EL REF PARA HACER INTERACTIVA LA PAGINA
-import { onMounted, ref }  from "vue";
+import { onMounted, ref, computed }  from "vue";
+import { useStore} from "vuex";
 
 export default {
     setup(){
@@ -53,9 +55,22 @@ export default {
             console.log(idioma.value);
             localStorage.setItem('idioma', idioma.value);  
         };
+
+
+        let store = useStore();
+
+        onMounted(async ()=>{
+        
+           let data = await fetch('https://script.google.com/macros/s/AKfycbzZ2N-8TdxAtDtOrWp9VyPdVJuOdCtMO9APLyOj1GnjTJzz_Er9TpVi6Cf6MF49elHn/exec?action=games.search')
+            let response = await data.json();
+            store.commit("SetGames", response.data);       
+        })        
+        
+        let user = computed(() => store.state.user)
         return {
             canvi,
-            idioma
+            idioma,
+            user
         }
     }
 }

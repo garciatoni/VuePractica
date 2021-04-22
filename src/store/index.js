@@ -2,11 +2,16 @@ import { createStore } from 'vuex'
 
 export default createStore({
     state: {
-        games: []
+        games: [],
+        user: 'login',
     },
     mutations: {
         SetGames(state, games) {
             state.games = games;
+        },
+
+        SetUser(state, user) {
+            state.user = user;
         }
     },
     actions: {

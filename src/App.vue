@@ -4,21 +4,21 @@
 
 <script>
 
-import { onMounted }  from "vue";
-import { useStore} from "vuex";
+// import { onMounted }  from "vue";
+// import { useStore} from "vuex";
 
 export default {
     
     setup(){
-        let store = useStore();
+        // let store = useStore();
       
 
-        onMounted(async ()=>{
-           let data = await fetch('https://script.google.com/macros/s/AKfycbzZ2N-8TdxAtDtOrWp9VyPdVJuOdCtMO9APLyOj1GnjTJzz_Er9TpVi6Cf6MF49elHn/exec?action=games.search')
-            let response = await data.json();
-            store.commit("SetGames", response.data);   
-            console.log('entra')    
-        })
+        // onMounted(async ()=>{
+        //    let data = await fetch('https://script.google.com/macros/s/AKfycbzZ2N-8TdxAtDtOrWp9VyPdVJuOdCtMO9APLyOj1GnjTJzz_Er9TpVi6Cf6MF49elHn/exec?action=games.search')
+        //     let response = await data.json();
+        //     store.commit("SetGames", response.data);   
+        //     console.log('entra')    
+        // })
 
   
 

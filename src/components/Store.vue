@@ -6,16 +6,19 @@
                     <div id="main" class="col-9">
                         <section id="searchbar" class="row">
                             <div id="search" class="col-7">
-                                <input name="search">
-                                <button name="submit">Search</button>
+                                <form  @submit.prevent="Buscar">
+                                    <input v-model="busqueda" name="search">
+                                    <button name="submit">Search</button>
+                                </form>
+
                             </div>
                             <div id="sort" class="col-5">
                                 <div class="right">
                                     <label for="criteria">Sort by</label>
-                                    <select name="criteria">
+                                    <select @change="Asc" name="criteria">
                                         <option selected disabled>---</option>
-                                        <option value="asc">Price asc</option>
-                                        <option value="desc">Price desc</option>
+                                        <option class="asc" value="asc">Price asc</option>
+                                        <option class="desc" value="desc">Price desc</option>
                                     </select>
                                 </div>
                             </div>
@@ -25,7 +28,7 @@
                         </section> -->
                         <section id="results">
                             <ul>
-                                <li v-for="game in games" :key="game.id" class="row">
+                                <li v-for="game in juegos" :key="game.id" class="row">
                                     <div class="col-2 cover">
                                         <p><img alt="TITLE" :src=game.cover></p>                                    
                                     </div>
@@ -100,8 +103,8 @@
 </template>
 
 <script>
-
-//import { onMounted, ref, computed }  from "vue";
+//onMounted, ref, 
+import { computed, ref }  from "vue";
 import { useStore} from "vuex";
 
 export default {
@@ -109,20 +112,17 @@ export default {
     setup(){
 
         let store = useStore();
+        let games = computed(() => store.state.games);
         
-        let games = store.state.games;
-        
-        console.log(games);
+        let juegos = computed(() => {
+            return (games.value).filter( game => {
+                // console.log(game.title.includes(buscar.value));
+                return game.title.toLowerCase().includes(buscar.value.toLowerCase())
+            });
+        });
 
-        // let games= ref ([]);
-
-        // onMounted(async ()=>{
-        //    let data = await fetch('https://script.google.com/macros/s/AKfycbzZ2N-8TdxAtDtOrWp9VyPdVJuOdCtMO9APLyOj1GnjTJzz_Er9TpVi6Cf6MF49elHn/exec?action=games.search')
-        //     let response = await data.json();
-        //     games.value = response.data;
-        //     store.commit("SetGames", response.data);       
-        // })
-
+        let buscar = ref('');
+        let busqueda = ref('');
 
         const Descuento = (a, b) => {
             let c = a * (-1);
@@ -131,10 +131,47 @@ export default {
             return e.toFixed(2)
         }
 
+        const Buscar = () => {
+            buscar.value = busqueda.value;
+        }
+
+        const Asc = () =>{
+            let ordenAsc = [];
+            let ultimoJuego;
+            (juegos.value).forEach(juego => {
+                if (ordenAsc.length == 0){
+                    // console.log(juego);
+                    ordenAsc.push(juego);
+                    ultimoJuego = juego;
+                }else{
+                    console.log(ultimoJuego);
+                    console.log(juego);
+                    let id = ordenAsc.indexOf(ultimoJuego.id);
+                    
+                    console.log(id);
+                    if(ultimoJuego < juego){
+                        ordenAsc.splice(id+1, 0, juego);
+                    }else if (ultimoJuego > juego){
+                        ordenAsc.splice(id-1, 0, juego);
+                    }else{
+                        ordenAsc.unshift(juego);
+                    }
+                    ultimoJuego = juego;
+                }
+            });
+            // console.log('oko')
+            // console.log(ordenAsc);
+            juegos.value = ordenAsc;
+            // console.log(juegos.value);
+        }
+
         return{
             games,
-            Descuento
-
+            Descuento,
+            Buscar,
+            busqueda,
+            juegos,
+            Asc
         }
     }
 }
@@ -220,10 +257,6 @@ export default {
             display: inline;
             margin-left: 5px;
         }
-    .mac{
-        color: white;
-    }
-
 #sidebar {
     padding-left: 5px;
 }
@@ -239,4 +272,10 @@ export default {
         .block .block-content {
             padding: 6px;
         }
+.asc{
+    color: black;
+}
+.desc{
+    color: black;
+}
 </style>

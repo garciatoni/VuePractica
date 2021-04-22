@@ -24,14 +24,16 @@
 
 <script>
 import { auth} from "../firebasejs";
-import {ref} from "vue";
+import { ref} from "vue";
+import { useStore} from "vuex";
 
 export default {
   
   setup() {
-
+      let store = useStore();
       let email=ref("");
       let password=ref("");
+
      
      const userLogin = () => {
         console.log(email.value);
@@ -40,6 +42,7 @@ export default {
         .signInWithEmailAndPassword(email.value, password.value)
         .then(() => {   
             console.log('entra login');
+            store.commit("SetUser", email.value);     
         })
         .catch((error) => {
             console.log('error login '+error);
